@@ -1,0 +1,140 @@
+@tailwind preflight;
+@tailwind components;
+
+* {
+  position: relative;
+}
+
+.anim {
+  transition: all 0.1s ease;
+}
+
+.btn {
+  @apply .inline-block .align-top .my-4 .py-4 .px-6 .rounded .shadow .no-underline;
+}
+
+.editable {
+  min-height: 2rem;
+}
+.editable-block-name {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  padding: 4px 6px;
+  font-family: monospace;
+  border-radius: 2px 2px 0 0;
+  line-height: 1.1;
+  background: darken(#129fc5, 30%);
+  color: white;
+  font-size: 0.6rem;
+  z-index: 30;
+  display: none;
+  .editable-focused > .editable > &,
+  .editable-focused > & {
+    background: darken(white, 50%);
+  }
+  .editable-focused > .editable > &,
+  .editable-focused > &,
+  .editable-hovered > & {
+    display: block;
+  }
+}
+
+.editable-overlay {
+  @extend .anim;
+  @apply .w-full .h-full .absolute .pin .cursor-pointer;
+  pointer-events: none;
+  border: dashed 1px darken(white, 50%);
+  mix-blend-mode: difference;
+  opacity: 0;
+  .editable:hover & {
+    opacity: 0.25;
+  }
+  .sortable-ghost > &,
+  .editable-hovered & {
+    opacity: 0.5 !important;
+  }
+  .sortable-ghost > & {
+    border-color: red;
+  }
+  .sortable-chosen > & {
+    // border-color: desaturate(#129fc5, 50%);
+  }
+  .editable-focused > &,
+  .editable-hovered > & {
+    z-index: 30;
+    // border: dashed 1px #129fc5;
+  }
+  .editable-focused > .editable > &,
+  .editable-focused > & {
+    opacity: 1 !important;
+    // border-color: darken(white, 50%);
+    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
+  }
+}
+
+@keyframes componentAdded {
+  0% {
+    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
+  }
+  25% {
+    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
+  }
+  50% {
+    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
+  }
+  75% {
+    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
+  }
+}
+
+.editable-focused,
+.component-entered-page {
+  animation: componentAdded 0.5s;
+}
+
+.grid {
+  @apply .flex .flex-wrap .-mx-4;
+  > * {
+    @apply .px-4;
+  }
+  &.grid-lg {
+    @apply .flex .flex-wrap .-mx-8;
+    > * {
+      @apply .px-8;
+    }
+  }
+}
+
+.page {
+  @apply .rounded .shadow .bg-white .overflow-hidden;
+}
+
+.page > [data-block-content] {
+  @apply .min-h-screen;
+}
+[data-block-content] {
+  min-height: 2rem;
+  min-width: 2rem;
+  // border: dashed 1px red;
+  @apply .h-full;
+  .card > & {
+    // min-height: 4rem;
+    // @apply .-m-4 .p-4;
+  }
+}
+
+.card {
+  @apply .p-4 .shadow-lg .rounded .bg-white;
+}
+
+header > div {
+  @apply .flex .items-center;
+}
+
+@import "components/draggable";
+
+@tailwind utilities;

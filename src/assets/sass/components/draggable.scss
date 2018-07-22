@@ -1,0 +1,12 @@
+.sortable {
+  &-ghost {
+    z-index: 31;
+    opacity: 0.5;
+  }
+}
+
+#sourceblocks {
+  .sortable-ghost {
+    display: none;
+  }
+}
