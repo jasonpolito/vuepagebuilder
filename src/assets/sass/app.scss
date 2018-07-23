@@ -1,6 +1,8 @@
 @tailwind preflight;
 @tailwind components;
 
+$simple-line-font-path: "~simple-line-icons/fonts/";
+@import "~simple-line-icons/scss/simple-line-icons";
 * {
   position: relative;
 }
@@ -13,9 +15,9 @@
   @apply .inline-block .align-top .my-4 .py-4 .px-6 .rounded .shadow .no-underline;
 }
 
-.editable {
-  min-height: 2rem;
-}
+// .editable {
+//   min-height: 2rem;
+// }
 .editable-block-name {
   position: absolute;
   bottom: 100%;
@@ -40,6 +42,13 @@
   }
 }
 
+.previewing-page {
+  .editable-block-name,
+  .editable-overlay {
+    display: none;
+  }
+}
+
 .editable-overlay {
   @extend .anim;
   @apply .w-full .h-full .absolute .pin .cursor-pointer;
@@ -51,6 +60,7 @@
     opacity: 0.25;
   }
   .sortable-ghost > &,
+  .editable-focused &,
   .editable-hovered & {
     opacity: 0.5 !important;
   }
@@ -110,17 +120,16 @@
 }
 
 .page {
-  @apply .rounded .shadow .bg-white .overflow-hidden;
+  @apply .shadow-lg .bg-white;
 }
 
 .page > [data-block-content] {
   @apply .min-h-screen;
 }
 [data-block-content] {
-  min-height: 2rem;
   min-width: 2rem;
   // border: dashed 1px red;
-  @apply .h-full;
+  @apply .h-full .py-4;
   .card > & {
     // min-height: 4rem;
     // @apply .-m-4 .p-4;

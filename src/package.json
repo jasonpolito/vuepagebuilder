@@ -15,9 +15,11 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.4",
+    "html2canvas": "^1.0.0-alpha.12",
     "iview": "^2.14.3",
     "lodash": "^4.17.10",
     "nuxt": "^1.0.0",
+    "simple-line-icons": "^2.4.1",
     "uuid": "^3.3.2",
     "vue-form-generator": "^2.2.2",
     "vue-quill-editor": "^3.0.6",

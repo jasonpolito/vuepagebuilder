@@ -4,12 +4,14 @@ import Page from "@/components/Page";
 import Grid from "@/components/Grid";
 import Column from "@/components/Column";
 import EditableBlock from "@/components/EditableBlock";
+import BlockContent from "@/components/Block/BlockContent";
 import Card from "@/components/Card";
 import TextContent from "@/components/TextContent";
 import Btn from "@/components/Btn";
 import Container from "@/components/Container";
 import Image from "@/components/Image";
 import Section from "@/components/Section";
+import { getBlockById } from "~/store/blocks";
 import { blockTemplates, blockCollections } from "~/plugins/blockTemplates";
 import _ from "lodash";
 
@@ -18,17 +20,38 @@ export const generateBlockTemplate = (template, parent) => {
   let res = [];
   for (let type in template) {
     let children = template[type].children;
-    let block = _.merge(
-      _.cloneDeep(blockTemplates[type]),
-      _.cloneDeep(template[type])
-    );
+    let deepClone = _.cloneDeep(blockTemplates[type]);
+    let deepCloneBlock = _.cloneDeep(template[type]);
+    let block = _.merge(deepClone, deepCloneBlock);
+    let responsiveDefaults = {};
     delete block.children;
     block.id = uuid.v4();
+    block.css = "";
+    block.order = template.order;
     blockIds.push(block.id);
     res.push(block);
     block.parent = parent;
+    for (let key in block.settings) {
+      let setting = block.settings[key];
+      if (setting.responsive) {
+        setting.viewports = {};
+        // console.log(_.has(block, "viewports"));
+        ["sm", "md", "lg"].forEach(size => {
+          let clone = _.cloneDeep(setting);
+          if (
+            !_.has(deepCloneBlock, `settings.${key}.viewports.${size}.value`)
+          ) {
+            clone.value = setting.responsiveDefaults[size];
+          } else {
+            clone.value = deepCloneBlock.settings[key].viewports[size].value;
+          }
+          block.settings[key].viewports[size] = clone;
+        });
+      }
+    }
     if (children && children.length) {
-      children.forEach(child => {
+      children.forEach((child, i) => {
+        child.order = i;
         res.push(generateBlockTemplate(child, block.id));
       });
     }
@@ -53,9 +76,11 @@ export const generateBlockIds = (blocks, parent) => {
 
 export const buildingBlocks = generateBlockTemplate(blockTemplates, "source");
 export const seedBlocks = [];
+// export const seedBlocks = generateBlockTemplate(blockCollections, "root");
 
 Vue.component("page", Page);
 Vue.component("container", Container);
+Vue.component("block-content", BlockContent);
 Vue.component("grid", Grid);
 Vue.component("editable-block", EditableBlock);
 Vue.component("column", Column);

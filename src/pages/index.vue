@@ -1,7 +1,5 @@
 <template>
-  <div class="py-2">
-    <page :block="root"></page>
-  </div>
+  <page :block="currentPage"></page>
 </template>
 
 <script>
@@ -13,7 +11,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      root: "blocks/root"
+      currentPage: "blocks/currentPage"
     })
   }
 };

@@ -1,29 +1,33 @@
 <template>
-  <div class="flex flex-col h-screen">
-    <app-header></app-header>
+  <div class="flex flex-col h-screen" :class="previewingPage ? 'previewing-page' : ''">
+    <app-header v-if="!previewingPage"></app-header>
     <div class="flex flex-1">
-      <app-sidebar></app-sidebar>
-      <div class="flex flex-col w-full">
-        <div class="w-full overflow-scroll bg-grey-lighter">
+      <app-sidebar-left v-if="leftSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-left>
+      <div :style="{width: pageWidth}" class="flex flex-col h-full">
+        <div class="flex-1 overflow-scroll bg-grey-lighter">
           <nuxt/>
         </div>
         <app-footer></app-footer>
       </div>
-      <app-sidebar></app-sidebar>
+      <app-sidebar-right v-if="rightSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-right>
     </div>
   </div>
 </template>
 
 <script>
-import AppHeader from "~/components/App/AppHeader";
-import AppSidebar from "~/components/App/AppSidebar";
-import AppFooter from "~/components/App/AppFooter";
+import AppHeader from "@/components/App/AppHeader";
+import AppSidebarLeft from "@/components/App/AppSidebarLeft";
+import AppSidebarRight from "@/components/App/AppSidebarRight";
+import AppFooter from "@/components/App/AppFooter";
+import uiMixin from "~/mixins/ui";
 
 export default {
+  mixins: [uiMixin],
   components: {
     AppHeader,
     AppFooter,
-    AppSidebar
+    AppSidebarRight,
+    AppSidebarLeft
   }
 };
 </script>

@@ -1,37 +1,51 @@
 export const state = () => ({
-  inspectBlockDialog: false
+  sidebarWidth: 240,
+  previewingPage: false,
+  leftSidebar: true,
+  rightSidebar: true
 });
 
 export const getters = {
-  inspectBlockDialog: state => state.inspectBlockDialog
+  previewingPage: state => state.previewingPage,
+  sidebarWidth: state => state.sidebarWidth,
+  leftSidebar: state => state.leftSidebar,
+  rightSidebar: state => state.rightSidebar,
+  totalSidebarWidth: state => {
+    let total = 0;
+    if (state.leftSidebar) total += state.sidebarWidth;
+    if (state.rightSidebar) total += state.sidebarWidth;
+    return total;
+  },
+  pageWidth: state => {
+    let total = 0;
+    if (state.leftSidebar) total += state.sidebarWidth;
+    if (state.rightSidebar) total += state.sidebarWidth;
+    return `calc(100% - ${total}px)`;
+  }
 };
 
 export const actions = {
-  toggleInspectBlockDialog({ commit }) {
-    commit("TOGGLE_INSPECT_BLOCK_DIALOG");
+  toggleLeftSidebar({ commit }) {
+    commit("TOGGLE_LEFT_SIDEBAR");
   },
-  closeInspectBlockDialog({ commit }) {
-    commit("CLOSE_INSPECT_BLOCK_DIALOG");
+  toggleRightSidebar({ commit }) {
+    commit("TOGGLE_RIGHT_SIDEBAR");
   },
-  setInspectBlockDialogState({ commit }, val) {
-    commit("SET_INSPECT_BLOCK_DIALOG", val);
-  },
-  openInspectBlockDialog({ commit }) {
-    commit("OPEN_INSPECT_BLOCK_DIALOG");
+  togglePagePreview({ commit }) {
+    commit("TOGGLE_PAGE_PREVIEW");
   }
 };
 
 export const mutations = {
-  SET_INSPECT_BLOCK_DIALOG(state, val) {
-    state.inspectBlockDialog = val;
+  TOGGLE_PAGE_PREVIEW(state) {
+    state.leftSidebar = state.previewingPage;
+    state.rightSidebar = state.previewingPage;
+    state.previewingPage = !state.previewingPage;
   },
-  TOGGLE_INSPECT_BLOCK_DIALOG(state) {
-    state.inspectBlockDialog = !state.inspectBlockDialog;
+  TOGGLE_LEFT_SIDEBAR(state) {
+    state.leftSidebar = !state.leftSidebar;
   },
-  OPEN_INSPECT_BLOCK_DIALOG(state) {
-    state.inspectBlockDialog = true;
-  },
-  CLOSE_INSPECT_BLOCK_DIALOG(state) {
-    state.inspectBlockDialog = false;
+  TOGGLE_RIGHT_SIDEBAR(state) {
+    state.rightSidebar = !state.rightSidebar;
   }
 };

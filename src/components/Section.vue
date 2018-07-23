@@ -1,19 +1,16 @@
 <template>
   <div
     v-editable
+    :id="block.id"
     @click.stop.prevent="inspect(block)"
-    :data-block="JSON.stringify(block)">
+    :data-block="JSON.stringify({component: block.component, id: block.id})">
     <div
       class="py-16 bg-cover bg-center"
       style="min-height: 8rem"
       :style="{'background-image': block.settings.backgroundImage.value ? `url(${block.settings.backgroundImage.value})` : '', backgroundColor: block.settings.backgroundColor.value, color: block.settings.textColor.value}"
     >
       <div class="container">
-        <no-ssr>
-          <draggable v-model="list" :options="pageDaggableOptions" @choose="onChoose" :data-block-content="JSON.stringify(block)">
-            <component v-for="block in list" :is="block.component" :key="block.id" :block="block" :class="{'editable-focused': blockIsInspected(block)}"></component>
-          </draggable>
-        </no-ssr>
+        <block-content :block="block"></block-content>
       </div>
     </div>
   </div>

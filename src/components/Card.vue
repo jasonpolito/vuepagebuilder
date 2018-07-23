@@ -1,20 +1,14 @@
 <template>
   <div
     @click.stop.prevent="inspect(block)"
-    :data-block="JSON.stringify(block)"
-    class="my-4"
-  >
-    <div
-      class="card"
+    :data-block="JSON.stringify({component: block.component, id: block.id})"
+    class="my-4 card"
       v-editable
-      :style="{background: block.settings.color.value}"
+      :id="block.component + block.id"
+      :style="{background: block.settings.backgroundColor.value, color: block.settings.textColor.value}"
     >
-      <no-ssr>
-        <draggable v-model="list" :options="pageDaggableOptions" @choose="onChoose" :data-block-content="JSON.stringify(block)">
-          <component v-for="block in list" :is="block.component" :key="block.id" :block="block" :class="{'editable-focused': blockIsInspected(block)}"></component>
-        </draggable>
-      </no-ssr>
-    </div>
+      <block-content :block="block"></block-content>
+      <style v-if="block.css">{{ scopedStyle(block) }}</style>
   </div>
 </template>
 

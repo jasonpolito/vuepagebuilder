@@ -2,6 +2,9 @@ export const blockTemplates = {
   grid: {
     component: "grid",
     name: "Grid",
+    actions: {
+      addColumn: "Add column"
+    },
     settings: {
       gutter: {
         label: "Gutter Width",
@@ -68,9 +71,14 @@ export const blockTemplates = {
     component: "card",
     name: "Card",
     settings: {
-      color: {
+      backgroundColor: {
         label: "Background Color",
         value: "#fff",
+        component: "block-setting-color"
+      },
+      textColor: {
+        label: "Text Color",
+        value: "#444444",
         component: "block-setting-color"
       }
     }
@@ -116,6 +124,12 @@ export const blockTemplates = {
     name: "Column",
     settings: {
       width: {
+        responsive: true,
+        responsiveDefaults: {
+          sm: "w-full",
+          md: "w-auto",
+          lg: "w-auto"
+        },
         value: "w-1/3",
         label: "Column Width",
         component: "block-setting-dropdown",
@@ -139,28 +153,54 @@ export const blockTemplates = {
         label: "Content",
         value: "<h2>Text Content</h2>",
         component: "block-setting-rich-text"
+      },
+      textColor: {
+        label: "Text Color",
+        value: "#444444",
+        component: "block-setting-color"
       }
     }
   }
 };
 
 export const blockCollections = {
-  Grid: {
-    "v-section": {
-      settings: {
-        backgroundColor: { value: "white" },
-        textColor: { value: "#444444" }
-      },
+  "Grid Column": {
+    column: {
+      settings: { width: { viewports: { lg: { value: "w-auto" } } } }
+    }
+  },
+  "Text Content": {
+    "text-content": {
+      settings: { content: { value: "<h2>Some text content...</h2>" } }
+    }
+  },
+  Card: {
+    card: {
       children: [
         {
-          grid: {
-            children: [
-              { column: { settings: { width: { value: "w-1/4" } } } },
-              { column: { settings: { width: { value: "w-1/4" } } } },
-              { column: { settings: { width: { value: "w-1/4" } } } },
-              { column: { settings: { width: { value: "w-1/4" } } } }
-            ]
+          "text-content": {
+            settings: {
+              content: { value: "Card content" }
+            }
           }
+        }
+      ]
+    }
+  },
+  Grid: {
+    grid: {
+      children: [
+        {
+          column: { settings: { width: { viewports: { lg: "w-auto" } } } }
+        },
+        {
+          column: { settings: { width: { viewports: { lg: "w-auto" } } } }
+        },
+        {
+          column: { settings: { width: { viewports: { lg: "w-auto" } } } }
+        },
+        {
+          column: { settings: { width: { viewports: { lg: "w-auto" } } } }
         }
       ]
     }
@@ -169,93 +209,21 @@ export const blockCollections = {
     "v-section": {
       children: [
         {
-          container: {
-            children: [
-              {
-                grid: {
-                  children: [
-                    {
-                      column: {
-                        // settings: { width: "w-1/2" },
-                        children: [
-                          {
-                            "text-content": {
-                              settings: {
-                                content: {
-                                  value:
-                                    "<h1>Big ol nice section with text!</h1>"
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-  },
-  Touts: {
-    container: {
-      children: [
-        {
           grid: {
             children: [
               {
                 column: {
+                  settings: {
+                    width: { viewports: { lg: { value: "w-2/3" } } }
+                  },
                   children: [
                     {
-                      card: {
-                        children: [
-                          {
-                            "text-content": {
-                              settings: {
-                                content: { value: "<h2>Picklthz</h2>" }
-                              }
-                            }
+                      "text-content": {
+                        settings: {
+                          content: {
+                            value: "<h1>Big ol nice section with text!</h1>"
                           }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                column: {
-                  children: [
-                    {
-                      card: {
-                        children: [
-                          {
-                            "text-content": {
-                              settings: { content: { value: "<h2>Monk</h2>" } }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                column: {
-                  children: [
-                    {
-                      card: {
-                        children: [
-                          {
-                            "text-content": {
-                              settings: {
-                                content: { value: "<h2>Wafflthz</h2>" }
-                              }
-                            }
-                          }
-                        ]
+                        }
                       }
                     }
                   ]

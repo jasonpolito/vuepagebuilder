@@ -3,7 +3,7 @@
     :class="`text-${block.settings.align.value}`"
     v-editable
     @click.stop.prevent="inspect(block)"
-    :data-block="JSON.stringify(block)"
+    :data-block="JSON.stringify({component: block.component, id: block.id})"
   >
     <a
       :href="block.settings.link.value"

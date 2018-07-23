@@ -1,14 +1,11 @@
 <template>
   <div
-  :class="`${block.settings.width.value}`"
+    :class="`flex-auto ${widthClass}`"
     @click.stop.prevent="inspect(block)"
-    :data-block="JSON.stringify(block)"
-     v-editable class="py-4">
-        <no-ssr>
-          <draggable v-model="list" :options="pageDaggableOptions" @choose="onChoose" :data-block-content="JSON.stringify(block)">
-            <component v-for="block in list" :is="block.component" :key="block.id" :block="block" :class="{'editable-focused': blockIsInspected(block)}"></component>
-          </draggable>
-        </no-ssr>
+    :data-block="JSON.stringify({component: block.component, id: block.id})"
+    v-editable
+  >
+    <block-content :block="block"></block-content>
   </div>
 </template>
 
@@ -16,6 +13,21 @@
 import blockMixin from "~/mixins/block";
 
 export default {
-  mixins: [blockMixin]
+  mixins: [blockMixin],
+  computed: {
+    widthClass() {
+      let res = "";
+      let viewports = this.block.settings.width.viewports;
+      for (let key in viewports) {
+        let value = viewports[key].value;
+        if (key !== "sm") {
+          res += ` ${key}:${value}`;
+        } else {
+          res += ` ${value}`;
+        }
+      }
+      return res;
+    }
+  }
 };
 </script>

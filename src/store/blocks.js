@@ -1,17 +1,6 @@
 import uuid from "uuid/v4";
 import Vue from "vue";
 import { buildingBlocks, seedBlocks } from "~/plugins/components";
-import { generateBlockTemplate } from "~/plugins/components";
-import { blockCollections } from "~/plugins/blockTemplates";
-
-const randomHex = function() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
 
 export const getBlockById = (blocks, id) => {
   let block = blocks.filter(block => block.id === id)[0];
@@ -27,19 +16,24 @@ const getBlockIndexById = (state, id) => {
 let rootBlock = {
   id: "root",
   component: "page",
-  name: "Page",
+  meta: {
+    title: "Homepage"
+  },
+  name: "Homepage",
   parent: null
 };
 
-let sourceBlock = {
+let sourceContainer = {
   id: "source",
-  component: "page",
   parent: null
 };
+
+console.log(seedBlocks);
 
 export const state = () => ({
   history: [],
-  index: [rootBlock, sourceBlock, ...buildingBlocks, ...seedBlocks],
+  index: [rootBlock, sourceContainer, ...buildingBlocks, ...seedBlocks],
+  currentPage: "root",
   inspectedBlock: null,
   draggingBlock: null
 });
@@ -48,8 +42,13 @@ export const getters = {
   index: state => state.index,
   inspectedBlock: state => state.inspectedBlock,
   draggingBlock: state => state.draggingBlock,
-  root: state => state.index.filter(block => block.id === "root")[0],
+  currentPage: state => getBlockById(state.index, state.currentPage),
   source: state => state.index.filter(block => block.id === "source")[0],
+  getPages: state => {
+    return state.index.filter(
+      block => block.component === "page" && block.id !== "source"
+    );
+  },
   blockChildren: state => id =>
     state.index
       .filter(block => block.parent === id)
@@ -57,6 +56,9 @@ export const getters = {
 };
 
 export const actions = {
+  setCurrentPage({ commit }, pageId) {
+    commit("SET_CURRENT_PAGE", pageId);
+  },
   inspectBlock({ commit }, block) {
     commit("INSPECT_BLOCK", block);
   },
@@ -88,6 +90,9 @@ export const actions = {
 };
 
 export const mutations = {
+  SET_CURRENT_PAGE(state, pageid) {
+    state.currentPage = pageid;
+  },
   INSPECT_BLOCK(state, block) {
     state.inspectedBlock = block;
   },
