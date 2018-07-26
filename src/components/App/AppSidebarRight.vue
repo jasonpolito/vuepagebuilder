@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full sidebar overflow-scroll">
+  <div class="h-full flex flex-col sidebar overflow-scroll">
     <template v-if="inspectedBlock">
-      <div class="p-4">
+      <div class="p-4 pb-0" style="border-bottom: solid 1px #eaeaea;">
         <div class="flex items-center justify-between pb-4">
           <div>
             <div class="h1">{{ inspectedBlock.name }}</div>
@@ -15,36 +15,52 @@
             </div>
           </div>
         </div>
-        <div v-if="inspectedBlock.actions">
+      </div>
+      <div class="py-4 flex-1 overflow-scroll">
+        <div v-if="inspectedBlock.actions" class="pb-4 px-4">
           <div v-for="(text, action) in inspectedBlock.actions" :key="text">
-            <el-button size="mini" @click="callMethod(action)">{{ text }}</el-button>
+            <el-button size="mini" @click="callMethod(action)" v-html="text"></el-button>
           </div>
         </div>
         <el-collapse v-model="activeTab" accordion>
           <el-collapse-item name="settings">
             <template slot="title">
-              <i class="icon-settings pr-2"></i>Settings
+              <i class="icon-settings pr-2 pl-4"></i>Block Settings
             </template>
             <block-settings :block="inspectedBlock"></block-settings>
           </el-collapse-item>
-          <el-collapse-item name="styles">
+          <el-collapse-item name="position">
             <template slot="title">
-              <i class="icon-drop pr-2"></i>Custom CSS
+              <i class="icon-frame pr-2 pl-4"></i>Block Position
             </template>
-            <div class="text-xs text-grey font-mono">.element {</div>
-            <div class="text-xs">
-              <el-input
-                type="textarea"
-                :rows="10"
-                class="font-mono"
-                placeholder="Custom CSS"
-                v-model="inspectedBlock.css">
-              </el-input>
+            <div class="px-4">
+              <div class="p-4 bg-grey-lighter rounded">
+                <el-input-number size="mini" v-model="padding.top"></el-input-number>
+                <div class="p-4 bg-white rounded"></div>
+              </div>
             </div>
-            <div class="text-xs text-grey font-mono">}</div>
+          </el-collapse-item>
+          <el-collapse-item name="customCSS">
+            <template slot="title">
+              <i class="icon-drop pr-2 pl-4"></i>Custom CSS
+            </template>
+            <div class="px-4">
+              <div class="text-xs text-grey font-mono">.element {</div>
+              <div class="text-xs">
+                <el-input
+                  type="textarea"
+                  :rows="10"
+                  class="font-mono"
+                  placeholder="Custom CSS"
+                  v-model="inspectedBlock.css">
+                </el-input>
+              </div>
+              <div class="text-xs text-grey font-mono">}</div>
+            </div>
           </el-collapse-item>
         </el-collapse>
       </div>
+      <div class="font-thin text-grey-dark p-4 font-mono" style="font-size: 8px">{{ inspectedBlock.id }}</div>
     </template>
   </div>
 </template>
@@ -71,13 +87,14 @@ export default {
   data() {
     return {
       activeTab: "settings",
+      padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      margin: { top: 0, right: 0, bottom: 0, left: 0 },
       css: "{background: red;}"
     };
   },
   mixins: [blockMixin],
   methods: {
     callMethod(name) {
-      console.log(name);
       this[name]();
     },
     addColumn() {
@@ -86,7 +103,6 @@ export default {
         this.inspectedBlock.id
       )[0];
       block.order = this.blockChildren(this.inspectedBlock.id).length;
-      console.log(block);
       this.addBlock(block);
     },
     captureScreenShot() {
@@ -99,21 +115,6 @@ export default {
           });
         }
       );
-    },
-    duplicateBlock(block) {
-      let children = this.blockChildrenDeep(block.id);
-      let newBlock = _.cloneDeep(block);
-      let newId = uuid();
-      newBlock.id += newId;
-      newBlock.order = newBlock.order + 1;
-      this.addBlock(newBlock);
-      children.forEach(block => {
-        let newBlock = _.cloneDeep(block);
-        newBlock.id += newId;
-        newBlock.parent += newId;
-        this.addBlock(newBlock);
-      });
-      this.inspect(newBlock);
     }
   }
 };

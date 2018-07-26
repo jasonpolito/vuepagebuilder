@@ -1,22 +1,14 @@
 <template>
-  <div :class="!previewingPage ? 'p-4' : ''">
-    <div class="fixed pin-t pin-r p-4 z-50">
-      <el-button
-        v-if="previewingPage"
-        @click="togglePagePreview"
-        class="shadow-lg"
-        icon="icon-vector"
-        circle
-      ></el-button>
-    </div>
-    <div class="page" v-editable style="min-height: 87vh">
-      <div :style="{zoom: zoomLevel}" class="anim">
-        <no-ssr>
-          <draggable v-model="list" :options="pageDaggableOptions" @choose="onChoose" :data-block-content="JSON.stringify(block)" style="min-height: 100vh">
-            <component v-for="block in list" :is="block.component" :key="block.id" :block="block" :class="{'editable-focused': blockIsInspected(block)}"></component>
-          </draggable>
-        </no-ssr>
-      </div>
+  <div :class="{'p-4': !previewingPage}">
+    <div
+      class="page" 
+      v-editable
+      :style="{transform: `scale(${zoomLevel})`, width: computedPageStyle}" style="transform-origin: 0 0">
+      <no-ssr>
+        <draggable v-model="list" :options="pageDaggableOptions" @choose="onChoose" :data-block-content="JSON.stringify(block)" style="min-height: 100vh">
+          <component v-for="block in list" :is="block.component" :key="block.id" :block="block" :class="{'editable-focused': blockIsInspected(block)}"></component>
+        </draggable>
+      </no-ssr>
     </div>
   </div>
 </template>
@@ -33,8 +25,14 @@ export default {
       editingPage: "ui/editingPage"
     }),
     zoomLevel() {
-      let page = document.documentElement.offsetWidth;
+      let page = document.documentElement.clientWidth;
       return (page - this.totalSidebarWidth) / page;
+    },
+    computedPageStyle() {
+      let subtract = 0;
+      if (this.leftSidebar) subtract += this.sidebarWidth;
+      if (this.rightSidebar) subtract += this.sidebarWidth;
+      return `calc(100% + ${subtract}px)`;
     }
   },
   methods: {
@@ -44,3 +42,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.page {
+  pointer-events: all;
+}
+</style>

@@ -1,16 +1,13 @@
 <template>
   <div
     v-editable
-    :id="block.component + block.id"
     @click.stop.prevent="inspect(block)"
     :data-block="JSON.stringify({component: block.component, id: block.id})"
-    class="bg-cover bg-center anim"
-    :class="`py-${block.settings.padding.value}`"
-    style="min-height: 2rem"
   >
-    <div class="container">
-      <block-content :block="block"></block-content>
-    </div>
+    <a
+      :id="block.component + block.id"
+      :href="block.settings.url.value"
+    >{{ block.settings.text.value }}</a>
     <style>{{ blockStyle }}</style>
   </div>
 </template>
@@ -19,7 +16,13 @@
 import blockMixin from "~/mixins/block";
 
 export default {
-  mixins: [blockMixin],
-  computed: {}
+  mixins: [blockMixin]
 };
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

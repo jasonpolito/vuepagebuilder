@@ -7,103 +7,15 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
   position: relative;
 }
 
+@import "components/editable";
+@import "components/typography";
+
 .anim {
   transition: all 0.1s ease;
 }
 
 .btn {
   @apply .inline-block .align-top .my-4 .py-4 .px-6 .rounded .shadow .no-underline;
-}
-
-// .editable {
-//   min-height: 2rem;
-// }
-.editable-block-name {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  padding: 4px 6px;
-  font-family: monospace;
-  border-radius: 2px 2px 0 0;
-  line-height: 1.1;
-  background: darken(#129fc5, 30%);
-  color: white;
-  font-size: 0.6rem;
-  z-index: 30;
-  display: none;
-  .editable-focused > .editable > &,
-  .editable-focused > & {
-    background: darken(white, 50%);
-  }
-  .editable-focused > .editable > &,
-  .editable-focused > &,
-  .editable-hovered > & {
-    display: block;
-  }
-}
-
-.previewing-page {
-  .editable-block-name,
-  .editable-overlay {
-    display: none;
-  }
-}
-
-.editable-overlay {
-  @extend .anim;
-  @apply .w-full .h-full .absolute .pin .cursor-pointer;
-  pointer-events: none;
-  border: dashed 1px darken(white, 50%);
-  mix-blend-mode: difference;
-  opacity: 0;
-  .editable:hover & {
-    opacity: 0.25;
-  }
-  .sortable-ghost > &,
-  .editable-focused &,
-  .editable-hovered & {
-    opacity: 0.5 !important;
-  }
-  .sortable-ghost > & {
-    border-color: red;
-  }
-  .sortable-chosen > & {
-    // border-color: desaturate(#129fc5, 50%);
-  }
-  .editable-focused > &,
-  .editable-hovered > & {
-    z-index: 30;
-    // border: dashed 1px #129fc5;
-  }
-  .editable-focused > .editable > &,
-  .editable-focused > & {
-    opacity: 1 !important;
-    // border-color: darken(white, 50%);
-    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
-  }
-}
-
-@keyframes componentAdded {
-  0% {
-    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
-  }
-  25% {
-    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
-  }
-  50% {
-    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
-  }
-  75% {
-    box-shadow: 0 0 1rem rgba(darken(white, 50%), 1);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(darken(white, 50%), 1);
-  }
-}
-
-.editable-focused,
-.component-entered-page {
-  animation: componentAdded 0.5s;
 }
 
 .grid {
@@ -117,6 +29,12 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
       @apply .px-8;
     }
   }
+  &.grid-sm {
+    @apply .flex .flex-wrap .-mx-2;
+    > * {
+      @apply .px-2;
+    }
+  }
 }
 
 .page {
@@ -124,16 +42,11 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 }
 
 .page > [data-block-content] {
-  @apply .min-h-screen;
+  @apply .min-h-screen .py-0;
 }
 [data-block-content] {
   min-width: 2rem;
-  // border: dashed 1px red;
-  @apply .h-full .py-4;
-  .card > & {
-    // min-height: 4rem;
-    // @apply .-m-4 .p-4;
-  }
+  @apply .h-full .py-2;
 }
 
 .card {

@@ -11,6 +11,17 @@ import Btn from "@/components/Btn";
 import Container from "@/components/Container";
 import Image from "@/components/Image";
 import Section from "@/components/Section";
+import Menu from "@/components/Menu";
+import Link from "@/components/Link";
+import Masonry from "@/components/Masonry";
+import BlockSettingDropdown from "@/components/Block/Settings/BlockSettingDropdown";
+import BlockSettingColor from "@/components/Block/Settings/BlockSettingColor";
+import BlockSettingText from "@/components/Block/Settings/BlockSettingText";
+import BlockSettingImage from "@/components/Block/Settings/BlockSettingImage";
+import BlockSettingRichText from "@/components/Block/Settings/BlockSettingRichText";
+import BlockSettingRepeater from "@/components/Block/Settings/BlockSettingRepeater";
+import BlockSettingNumber from "@/components/Block/Settings/BlockSettingNumber";
+
 import { getBlockById } from "~/store/blocks";
 import { blockTemplates, blockCollections } from "~/plugins/blockTemplates";
 import _ from "lodash";
@@ -23,7 +34,6 @@ export const generateBlockTemplate = (template, parent) => {
     let deepClone = _.cloneDeep(blockTemplates[type]);
     let deepCloneBlock = _.cloneDeep(template[type]);
     let block = _.merge(deepClone, deepCloneBlock);
-    let responsiveDefaults = {};
     delete block.children;
     block.id = uuid.v4();
     block.css = "";
@@ -35,17 +45,12 @@ export const generateBlockTemplate = (template, parent) => {
       let setting = block.settings[key];
       if (setting.responsive) {
         setting.viewports = {};
-        // console.log(_.has(block, "viewports"));
-        ["sm", "md", "lg"].forEach(size => {
-          let clone = _.cloneDeep(setting);
-          if (
-            !_.has(deepCloneBlock, `settings.${key}.viewports.${size}.value`)
-          ) {
-            clone.value = setting.responsiveDefaults[size];
-          } else {
-            clone.value = deepCloneBlock.settings[key].viewports[size].value;
-          }
-          block.settings[key].viewports[size] = clone;
+        ["lg", "md", "sm"].forEach(size => {
+          setting.viewports[size] = {
+            label: setting.label,
+            options: setting.options,
+            value: setting.responsiveDefaults[size]
+          };
         });
       }
     }
@@ -65,10 +70,10 @@ export const generateBlockIds = (blocks, parent) => {
   let part = newId.slice(0, 6);
   blocks.forEach(block => {
     let id = block.id;
-    block.id = id.slice(0, index) + part + id.slice(index);
+    block.id = id.slice(0, index) + part + id.slice(index - 6);
     if (block.parent) {
       let parent = block.parent;
-      block.parent = parent.slice(0, index) + part + parent.slice(index);
+      block.parent = parent.slice(0, index) + part + parent.slice(index - 6);
     }
   });
   return blocks;
@@ -82,6 +87,7 @@ Vue.component("page", Page);
 Vue.component("container", Container);
 Vue.component("block-content", BlockContent);
 Vue.component("grid", Grid);
+Vue.component("v-menu", Menu);
 Vue.component("editable-block", EditableBlock);
 Vue.component("column", Column);
 Vue.component("card", Card);
@@ -89,3 +95,13 @@ Vue.component("v-section", Section);
 Vue.component("text-content", TextContent);
 Vue.component("btn", Btn);
 Vue.component("v-image", Image);
+Vue.component("v-link", Link);
+Vue.component("v-masonry", Masonry);
+
+Vue.component("block-setting-dropdown", BlockSettingDropdown);
+Vue.component("block-setting-color", BlockSettingColor);
+Vue.component("block-setting-text", BlockSettingText);
+Vue.component("block-setting-image", BlockSettingImage);
+Vue.component("block-setting-rich-text", BlockSettingRichText);
+Vue.component("block-setting-repeater", BlockSettingRepeater);
+Vue.component("block-setting-number", BlockSettingNumber);

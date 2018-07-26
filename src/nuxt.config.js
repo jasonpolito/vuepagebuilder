@@ -17,13 +17,19 @@ module.exports = {
   */
   loading: { color: "#3B8070" },
 
-  css: ["~/assets/sass/app.scss", "element-ui/lib/theme-chalk/index.css"],
+  css: [
+    "~/assets/sass/app.scss",
+    "~/assets/style/markdown.styl",
+    "element-ui/lib/theme-chalk/index.css"
+  ],
 
   plugins: [
     "~/plugins/editable",
     "~/plugins/components",
+    "~/plugins/filepond",
+    "~/plugins/masonry",
     "~/plugins/element-ui",
-    { src: "~/plugins/vue-quill-editor", ssr: false }
+    { src: "~/plugins/editor", ssr: false }
   ],
 
   /*

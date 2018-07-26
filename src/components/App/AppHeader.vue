@@ -5,7 +5,7 @@
         <div>
             <el-button
               @click="toggleLeftSidebar"
-              :icon="leftSidebar ? 'icon-arrow-left' : 'icon-menu'"
+              :icon="leftSidebar ? 'icon-arrow-left' : 'icon-arrow-right'"
               circle
             ></el-button>
         </div>
@@ -23,8 +23,13 @@
       </div>
       <div class="pr-4">
         <div class="grid">
+          <el-button
+            @click="toggleLeftSidebar"
+            icon="icon-plus"
+            circle
+          ></el-button>
           <div>
-            <el-select v-model="value8" filterable placeholder="Select">
+            <el-select v-model="value8" filterable placeholder="Pages">
               <el-option
                 v-for="item in pages"
                 :key="item.id"
@@ -40,7 +45,7 @@
           ></el-button>
           <el-button
             @click="toggleRightSidebar"
-            :icon="rightSidebar ? 'icon-arrow-right' : 'icon-menu'"
+            :icon="rightSidebar ? 'icon-arrow-right' : 'icon-arrow-left'"
             circle
           ></el-button>
         </div>

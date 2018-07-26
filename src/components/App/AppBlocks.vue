@@ -1,24 +1,9 @@
 <template>
-  <div>
-    <el-menu>
-      <!-- <draggable
-        :value="sourceBlocks"
-        :clone="onClone"
-        @choose="onChoose"
-        :options="listDaggableOptions"
-      >
-        <el-menu-item
-          v-for="(block, i) in sourceBlocks"
-          :key="block.id"
-          :index="`${i}`"
-          :data-block="JSON.stringify(block)"
-        >
-          {{ block.name }}
-        </el-menu-item>
-      </draggable> -->
-      <el-submenu index="2">
+  <div class="p-4">
+    <el-collapse accordion>
+      <el-collapse-item name='elements'>
         <template slot="title">
-          <i class="el-icon-circle-plus-outline"></i>
+          <i class="icon-grid pr-2"></i>
           <span>Elements</span>
         </template>
         <draggable
@@ -27,18 +12,19 @@
           @choose="onChoose"
           :options="listDaggableOptions"
         >
-          <el-menu-item
+          <div
             v-for="(collection, i) in blockCollections"
             :key="collection.name"
-            :index="`2-${i}`"
-            :data-block="JSON.stringify(getRoot(generateBlockTemplate(collection.blocks)))"
+            :index="`1-${i}`"
+            class="py-2"
+            :data-block="JSON.stringify(blockJSON(getRoot(generateBlockTemplate(collection.blocks))))"
           >
-            {{ collection.name }}
-            <img :src="collection.image" alt="" class="w-full vertical-align: topn-top rounded shadow-md">
-          </el-menu-item>
+            <img v-if="collection.image" :src="collection.image" alt="" class="w-full align-top rounded shadow-md">
+            <span v-else>{{ collection.name }}</span>
+          </div>
         </draggable>
-      </el-submenu>
-    </el-menu>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 
@@ -57,10 +43,13 @@ export default {
   data() {
     return {
       blockCollections: Object.keys(blockCollections).map(key => {
-        let collection = blockCollections[key];
+        let collection = _.cloneDeep(blockCollections[key]);
+        let image = collection.image;
+        delete collection.image;
+        console.log(collection);
         return {
           name: key,
-          image: "",
+          image: image,
           blocks: collection
         };
       })
@@ -78,6 +67,9 @@ export default {
   },
   methods: {
     generateBlockTemplate,
+    blockJSON: block => {
+      return { id: block.id, component: block.component };
+    },
     getRoot: blocks => {
       let ids = blocks.map(block => block.id);
       return blocks.filter(block => !ids.includes(block.parent))[0];
@@ -89,30 +81,20 @@ export default {
         this.addBlock(block);
       });
       return this.getRoot(blocks);
-    },
-    onClone(block) {
-      let seed = _.cloneDeep(
-        buildingBlocks.filter(b => b.component === block.component)[0]
-      );
-      seed.id = uuid();
-      seed.parent = null;
-      this.addBlock(seed);
-      return seed;
-    },
-    duplicateBlock(block) {
-      let children = this.blockChildrenDeep(block.id);
-      let newBlock = _.cloneDeep(block);
-      let newId = uuid();
-      newBlock.id += newId;
-      newBlock.order = newBlock.order + 1;
-      this.addBlock(newBlock);
-      children.forEach(block => {
-        let newBlock = _.cloneDeep(block);
-        newBlock.id += newId;
-        newBlock.parent += newId;
-        this.addBlock(newBlock);
-      });
     }
   }
 };
 </script>
+
+<style>
+.drag-handle-name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: white;
+  transform: translate(-50%, -50%);
+}
+</style>

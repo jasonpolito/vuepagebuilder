@@ -5,8 +5,14 @@
     v-editable
     >
     <div>
-      <img :src="block.settings.image.value" alt="" class="w-full align-top rounded shadow-lg bg-grey-light" style="min-width: 2rem; min-height: 2rem">
+      <img
+        :id="block.component + block.id"
+        :alt="block.settings.altText.value"
+        :src="block.settings.image.value"
+        class="w-full align-top rounded shadow-lg bg-grey-light"
+      >
     </div>
+    <style>{{ blockStyle }}</style>
   </div>
 </template>
 

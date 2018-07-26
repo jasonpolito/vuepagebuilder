@@ -5,10 +5,9 @@
     class="my-4 card"
       v-editable
       :id="block.component + block.id"
-      :style="{background: block.settings.backgroundColor.value, color: block.settings.textColor.value}"
     >
       <block-content :block="block"></block-content>
-      <style v-if="block.css">{{ scopedStyle(block) }}</style>
+      <style>{{ blockStyle }}</style>
   </div>
 </template>
 

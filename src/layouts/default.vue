@@ -1,15 +1,26 @@
 <template>
-  <div class="flex flex-col h-screen" :class="previewingPage ? 'previewing-page' : ''">
-    <app-header v-if="!previewingPage"></app-header>
-    <div class="flex flex-1">
-      <app-sidebar-left v-if="leftSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-left>
-      <div :style="{width: pageWidth}" class="flex flex-col h-full">
-        <div class="flex-1 overflow-scroll bg-grey-lighter">
-          <nuxt/>
+  <div>
+    <div class="flex flex-col h-screen" :class="previewingPage ? 'previewing-page' : ''">
+      <app-header v-if="!previewingPage"></app-header>
+      <div class="flex flex-1">
+        <app-sidebar-left v-if="leftSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-left>
+        <div :style="{width: pageWidth}" class="flex flex-col h-full">
+          <div class="flex-1 overflow-scroll bg-grey-lighter">
+            <nuxt/>
+          </div>
+          <app-footer></app-footer>
         </div>
-        <app-footer></app-footer>
+        <app-sidebar-right v-if="rightSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-right>
       </div>
-      <app-sidebar-right v-if="rightSidebar" :style="{width: `${sidebarWidth}px`}"></app-sidebar-right>
+    </div>
+    <div class="fixed pin-t pin-r p-4 z-50">
+      <el-button
+        v-if="previewingPage"
+        @click="togglePagePreview"
+        class="shadow-lg"
+        icon="icon-pencil"
+        circle
+      ></el-button>
     </div>
   </div>
 </template>

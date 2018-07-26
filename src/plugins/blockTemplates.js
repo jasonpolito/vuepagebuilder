@@ -1,14 +1,19 @@
 export const blockTemplates = {
+  "v-masonry": {
+    component: "v-masonry",
+    name: "Masonry",
+    settings: {}
+  },
   grid: {
     component: "grid",
     name: "Grid",
     actions: {
-      addColumn: "Add column"
+      addColumn: "Add Column"
     },
     settings: {
       gutter: {
         label: "Gutter Width",
-        Value: "normal",
+        value: "normal",
         component: "block-setting-dropdown",
         options: [
           { label: "Normal", value: "normal" },
@@ -43,20 +48,25 @@ export const blockTemplates = {
     component: "v-section",
     name: "Section",
     settings: {
-      backgroundImage: {
-        value: "",
-        label: "Image",
-        component: "block-setting-image"
+      padding: {
+        label: "Padding",
+        value: "16",
+        component: "block-setting-number"
       },
-      backgroundColor: {
+      "background-color": {
         label: "Background Color",
-        value: "#3d9df7",
+        value: "",
         component: "block-setting-color"
       },
-      textColor: {
+      color: {
         label: "Text Color",
-        value: "#fff",
+        value: "",
         component: "block-setting-color"
+      },
+      "background-image": {
+        value: "",
+        label: "Background Image",
+        component: "block-setting-image"
       }
     }
   },
@@ -64,21 +74,30 @@ export const blockTemplates = {
     component: "v-image",
     name: "Image",
     settings: {
-      image: { value: "", label: "Image", component: "block-setting-image" }
+      image: {
+        value: "/imageplaceholder.png",
+        label: "Image",
+        component: "block-setting-image"
+      },
+      altText: {
+        label: "Alt Text",
+        value: "",
+        component: "block-setting-text"
+      }
     }
   },
   card: {
     component: "card",
     name: "Card",
     settings: {
-      backgroundColor: {
+      "background-color": {
         label: "Background Color",
-        value: "#fff",
+        value: "",
         component: "block-setting-color"
       },
-      textColor: {
+      color: {
         label: "Text Color",
-        value: "#444444",
+        value: "",
         component: "block-setting-color"
       }
     }
@@ -107,14 +126,14 @@ export const blockTemplates = {
           { label: "Right", value: "right" }
         ]
       },
-      backgroundColor: {
+      "background-color": {
         label: "Background Color",
-        value: "#3d9df7",
+        value: "",
         component: "block-setting-color"
       },
-      textColor: {
+      color: {
         label: "Text Color",
-        value: "#fff",
+        value: "",
         component: "block-setting-color"
       }
     }
@@ -142,6 +161,24 @@ export const blockTemplates = {
           { label: "1/3", value: "w-1/3" },
           { label: "1/4", value: "w-1/4" }
         ]
+      },
+      alignSelf: {
+        responsive: true,
+        responsiveDefaults: {
+          sm: "self-auto",
+          md: "self-auto",
+          lg: "self-auto"
+        },
+        value: "self-1/3",
+        label: "Align Self",
+        component: "block-setting-dropdown",
+        options: [
+          { label: "Auto", value: "self-auto" },
+          { label: "Start", value: "self-start" },
+          { label: "Center", value: "self-center" },
+          { label: "End", value: "self-end" },
+          { label: "Stretch", value: "self-stretch" }
+        ]
       }
     }
   },
@@ -154,16 +191,63 @@ export const blockTemplates = {
         value: "<h2>Text Content</h2>",
         component: "block-setting-rich-text"
       },
-      textColor: {
+      "text-align": {
+        label: "Align Text",
+        value: "left",
+        component: "block-setting-dropdown",
+        options: [
+          { label: "Left", value: "left" },
+          { label: "Center", value: "center" },
+          { label: "Right", value: "right" }
+        ]
+      },
+      color: {
         label: "Text Color",
-        value: "#444444",
+        value: "",
         component: "block-setting-color"
+      }
+    }
+  },
+  "v-link": {
+    component: "v-link",
+    name: "Link",
+    settings: {
+      text: {
+        label: "Link Text",
+        value: "Link Text",
+        component: "block-setting-text"
+      },
+      url: {
+        label: "URL",
+        value: "#",
+        component: "block-setting-text"
+      }
+    }
+  },
+  "v-menu": {
+    component: "v-menu",
+    name: "Menu",
+    settings: {
+      links: {
+        repeater: "v-link",
+        value: [],
+        component: "block-setting-repeater"
       }
     }
   }
 };
 
 export const blockCollections = {
+  Image: {
+    image: "/imageplaceholder.png",
+    "v-image": {}
+  },
+  Masonry: {
+    "v-masonry": {}
+  },
+  Menu: {
+    "v-menu": {}
+  },
   "Grid Column": {
     column: {
       settings: { width: { viewports: { lg: { value: "w-auto" } } } }
@@ -205,7 +289,8 @@ export const blockCollections = {
       ]
     }
   },
-  "Nice Section": {
+  Section: {
+    image: "/section.png",
     "v-section": {
       children: [
         {
@@ -213,15 +298,12 @@ export const blockCollections = {
             children: [
               {
                 column: {
-                  settings: {
-                    width: { viewports: { lg: { value: "w-2/3" } } }
-                  },
                   children: [
                     {
                       "text-content": {
                         settings: {
                           content: {
-                            value: "<h1>Big ol nice section with text!</h1>"
+                            value: "# Editable content..."
                           }
                         }
                       }

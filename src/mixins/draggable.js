@@ -3,13 +3,16 @@ import { mapActions, mapGetters } from "vuex";
 import { getBlockById } from "~/store/blocks";
 
 const dropZoneMap = {
-  card: ["column", "card", "container", "v-section"],
+  card: ["column", "card", "container", "v-section", "v-masonry"],
   template: ["*"],
   "v-section": ["page"],
+  "v-masonry": ["page"],
+  "v-menu": ["page", "column", "card"],
+  "v-link": ["v-menu"],
   btn: ["card", "column", "card", "container", "v-section"],
   "v-image": ["card", "column", "card", "container", "v-section"],
   column: ["grid"],
-  grid: ["card", "container", "v-section", "page"],
+  grid: ["card", "container", "v-section"],
   "text-content": ["column", "card", "container", "v-section"]
 };
 
@@ -81,8 +84,8 @@ export default {
     }),
     parseBlockContent: target =>
       JSON.parse(target.getAttribute("data-block-content")),
-    onChoose(target) {
-      let data = JSON.parse(target.item.getAttribute("data-block"));
+    onChoose(evt) {
+      let data = JSON.parse(evt.item.getAttribute("data-block"));
       let block = getBlockById(this.blockIndex, data.id);
       this.setDraggingBlock(block ? block : data);
     }

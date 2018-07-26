@@ -20,7 +20,7 @@ function addBlockName(el, vnode) {
   let tag = document.createElement("div");
   tag.classList.add("editable-block-name");
   tag.innerText = vnode.context.block.name;
-  el.prepend(tag);
+  el.appendChild(tag);
 }
 
 Vue.directive("editable", {

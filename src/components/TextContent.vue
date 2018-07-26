@@ -4,14 +4,22 @@
     v-editable
     @click.stop.prevent="inspect(block)"
     :data-block="JSON.stringify({component: block.component, id: block.id})"
-    :style="{color: block.settings.textColor.value}"
     >
     <div>
-      <div class="ql-editor" style="padding: 0">
-        <div v-html="block.settings.content.value" :id="block.component + block.id" style="min-height: 2rem"></div>
-      </div>
-      <style v-if="block.css">{{ scopedStyle(block) }}</style>
+      <!-- <mavon-editor
+        :toolbarsFlag="false"
+        :subfield="false"
+        :imageClick="() => false"
+        defaultOpen="preview"
+        :value="block.settings.content.value"
+      ></mavon-editor> -->
+      <vue-markdown
+        :id="block.component + block.id"
+        style="min-height: 2rem"
+        :source="block.settings.content.value"
+      ></vue-markdown>
     </div>
+    <style>{{ blockStyle }}</style>
   </div>
 </template>
 

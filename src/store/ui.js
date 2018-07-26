@@ -1,5 +1,5 @@
 export const state = () => ({
-  sidebarWidth: 240,
+  sidebarWidth: 256,
   previewingPage: false,
   leftSidebar: true,
   rightSidebar: true
@@ -20,7 +20,7 @@ export const getters = {
     let total = 0;
     if (state.leftSidebar) total += state.sidebarWidth;
     if (state.rightSidebar) total += state.sidebarWidth;
-    return `calc(100% - ${total}px)`;
+    return `calc(100% - ${total}px + 6rem)`;
   }
 };
 

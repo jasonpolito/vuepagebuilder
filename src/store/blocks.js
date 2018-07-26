@@ -28,8 +28,6 @@ let sourceContainer = {
   parent: null
 };
 
-console.log(seedBlocks);
-
 export const state = () => ({
   history: [],
   index: [rootBlock, sourceContainer, ...buildingBlocks, ...seedBlocks],
@@ -81,8 +79,8 @@ export const actions = {
     commit("ADD_BLOCK", block);
   },
   removeBlock({ commit }, block) {
-    commit("REMOVE_BLOCK", block);
     commit("INSPECT_BLOCK", null);
+    commit("REMOVE_BLOCK", block);
   },
   cloneBlock({ commit }, block) {
     commit("CLONE_BLOCK", block);

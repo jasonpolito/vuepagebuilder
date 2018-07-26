@@ -51,9 +51,6 @@ export default {
     }
   },
   methods: {
-    test(val) {
-      console.log(val);
-    },
     ...mapActions({
       openDialog: "ui/openInspectBlockDialog",
       setDialog: "ui/setInspectBlockDialogState",
